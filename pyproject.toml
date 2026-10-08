@@ -1,0 +1,25 @@
+[project]
+name = "okta-mcp-poc"
+version = "0.1.0"
+description = "MCP server that signs people in with Okta and lets Okta groups decide which tools they can call"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Arunkumar V", email = "arunkumarv1530@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=4.0.11,<5",
+    "httpx>=0.28",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

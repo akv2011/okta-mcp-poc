@@ -12,11 +12,11 @@ ORG = os.environ["OKTA_ORG_URL"].rstrip("/")
 AUDIENCE = os.environ.get("MCP_AUDIENCE", "http://localhost:8080/mcp")
 SCOPES = {
     "mcp:tools.read": "Call read-only MCP tools",
-    "mcp:tools.write": "Call privileged MCP tools",
+    "mcp:tools.admin": "Call admin MCP tools",
 }
 GROUPS = {
     "mcp-readers": ["mcp:tools.read"],
-    "mcp-admins": ["mcp:tools.read", "mcp:tools.write"],
+    "mcp-admins": ["mcp:tools.read", "mcp:tools.admin"],
 }
 REDIRECT_URIS = [
     "http://127.0.0.1:8765/callback",          # scripts/get_token.py

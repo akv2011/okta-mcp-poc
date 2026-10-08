@@ -12,14 +12,16 @@ import secrets
 import threading
 import urllib.parse
 import webbrowser
+from pathlib import Path
 
 import httpx
 
 ISSUER = os.environ["OKTA_ISSUER"].rstrip("/")
 CLIENT_ID = os.environ["OKTA_CLIENT_ID"]
-RESOURCE = os.environ.get("MCP_AUDIENCE", "http://localhost:8080")
+RESOURCE = os.environ.get("MCP_AUDIENCE", "http://localhost:8080/mcp")
 REDIRECT_URI = "http://127.0.0.1:8765/callback"
-SCOPE = os.environ.get("SCOPES", "openid profile mcp:tools.read mcp:tools.write offline_access")
+SCOPE = os.environ.get("SCOPES", "openid profile mcp:tools.read mcp:tools.admin offline_access")
+TOKEN_FILE = Path(__file__).resolve().parent.parent / ".token"
 
 verifier = base64.urlsafe_b64encode(secrets.token_bytes(64)).rstrip(b"=").decode()
 challenge = base64.urlsafe_b64encode(
@@ -77,9 +79,9 @@ def main():
     payload = token.split(".")[1]
     claims = json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))
     print(json.dumps(claims, indent=2))
-    with open(".token", "w") as f:
-        f.write(token)
-    print("\naccess token written to .token")
+    TOKEN_FILE.write_text(token)
+    TOKEN_FILE.chmod(0o600)
+    print(f"\naccess token written to {TOKEN_FILE}")
 
 
 if __name__ == "__main__":
