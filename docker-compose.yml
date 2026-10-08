@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+
+  mcp:
+    build: ./mcp_server
+    ports:
+      - "8080:8080"
+    environment:
+      OKTA_ISSUER: ${OKTA_ISSUER:?set it in .env}
+      MCP_BASE_URL: ${MCP_BASE_URL:-http://localhost:8080}
+      MCP_AUDIENCE: ${MCP_AUDIENCE:-http://localhost:8080/mcp}
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
